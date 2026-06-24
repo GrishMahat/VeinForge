@@ -30,7 +30,6 @@ public class HUDManager {
         elements.add(DebugHUD.getInstance());
         elements.add(GlacialCommissionHUD.getInstance());
         elements.add(RouteBuilderHUD.getInstance());
-        elements.add(PathfinderStatsHUD.getInstance());
         elements.add(FishingHUD.getInstance());
     }
 
@@ -73,7 +72,6 @@ public class HUDManager {
         if (element instanceof GlacialCommissionHUD) return hud.enableGlacialHud;
         if (element instanceof DebugHUD) return hud.enableDebugHud;
         if (element instanceof RouteBuilderHUD) return hud.enableRouteBuilderHud;
-        if (element instanceof PathfinderStatsHUD) return hud.enablePathfinderStatsHud;
         if (element instanceof FishingHUD) return hud.enableFishingHud;
         return true;
     }
@@ -85,7 +83,6 @@ public class HUDManager {
         updateElement(DebugHUD.getInstance(), hud.debugHUD);
         updateElement(GlacialCommissionHUD.getInstance(), hud.glacialHUD);
         updateElement(RouteBuilderHUD.getInstance(), hud.routeBuilderHUD);
-        updateElement(PathfinderStatsHUD.getInstance(), hud.pathfinderStatsHUD);
         updateElement(FishingHUD.getInstance(), hud.fishingHUD);
         positionsLoaded = true;
     }
@@ -104,7 +101,6 @@ public class HUDManager {
         saveElement(DebugHUD.getInstance(), hud.debugHUD);
         saveElement(GlacialCommissionHUD.getInstance(), hud.glacialHUD);
         saveElement(RouteBuilderHUD.getInstance(), hud.routeBuilderHUD);
-        saveElement(PathfinderStatsHUD.getInstance(), hud.pathfinderStatsHUD);
         saveElement(FishingHUD.getInstance(), hud.fishingHUD);
 
         // Save the main config
@@ -132,11 +128,6 @@ public class HUDManager {
         RouteBuilderHUD.getInstance().setY(90);
         RouteBuilderHUD.getInstance().setAnchor(0);
         RouteBuilderHUD.getInstance().setScale(1.0f);
-
-        PathfinderStatsHUD.getInstance().setX(5);
-        PathfinderStatsHUD.getInstance().setY(140);
-        PathfinderStatsHUD.getInstance().setAnchor(0);
-        PathfinderStatsHUD.getInstance().setScale(1.0f);
 
         FishingHUD.getInstance().setX(5);
         FishingHUD.getInstance().setY(185);

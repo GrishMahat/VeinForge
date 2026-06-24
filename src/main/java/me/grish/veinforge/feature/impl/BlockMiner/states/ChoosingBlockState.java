@@ -36,13 +36,13 @@ public class ChoosingBlockState implements BlockMinerState {
         // Handle case where no blocks are found
         if (blocks.isEmpty()) {
             if (!timer.isScheduled()) {
-                log("Scheduled a 2-second timer to see if blocks spawn or not");
+                log("No blocks found, waiting " + blockMiner.getWaitThreshold() + "ms for respawn (ignorePrevPos=" + blockMiner.getTargetBlockPos() + ")");
                 timer.schedule(blockMiner.getWaitThreshold());
             }
 
             // If the timer has ended and still no blocks, stop mining
             if (timer.isScheduled() && timer.passed()) {
-                logError("Cannot find enough blocks to mine.");
+                logError("Still no blocks after " + blockMiner.getWaitThreshold() + "ms, stopping miner");
                 blockMiner.stop();
                 blockMiner.setError(BlockMiner.BlockMinerError.NOT_ENOUGH_BLOCKS);
                 return null;
@@ -55,6 +55,8 @@ public class ChoosingBlockState implements BlockMinerState {
         // Found blocks - select the best one (first in list) and transition to breaking
         blockMiner.setTargetBlockPos(blocks.get(0));
         blockMiner.setTargetBlockType(Minecraft.getInstance().level.getBlockState(blocks.get(0)).getBlock());
+        blockMiner.setBlockChanged(false);
+        log("Found " + blocks.size() + " blocks, selecting " + blocks.get(0) + " (" + blockMiner.getTargetBlockType() + ")");
         return new BreakingState();
     }
 

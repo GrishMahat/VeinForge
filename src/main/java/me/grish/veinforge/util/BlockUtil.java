@@ -291,8 +291,8 @@ public class BlockUtil {
             return 2000;
         }
 
-        // Mithril variants
-        if (block == Blocks.WOOL.gray()) {
+        // Mithril variants (gray mithril = gray wool OR cyan terracotta)
+        if (block == Blocks.WOOL.gray() || block == Blocks.DYED_TERRACOTTA.cyan()) {
             return 500;
         }
         if (block == Blocks.WOOL.lightBlue()) {

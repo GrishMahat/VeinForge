@@ -3,6 +3,7 @@ package me.grish.veinforge.feature.impl.BlockMiner;
 import lombok.Getter;
 import lombok.Setter;
 import me.grish.veinforge.VeinForge;
+import me.grish.veinforge.event.BlockChangeEvent;
 import me.grish.veinforge.event.SpawnParticleEvent;
 import me.grish.veinforge.feature.AbstractFeature;
 import me.grish.veinforge.feature.impl.BlockMiner.states.ApplyAbilityState;
@@ -35,7 +36,7 @@ import java.util.regex.Pattern;
  */
 public class BlockMiner extends AbstractFeature {
 
-    private static final long DEFAULT_PICKAXE_ABILITY_COOLDOWN_MS = 60000L;
+    public static final long DEFAULT_PICKAXE_ABILITY_COOLDOWN_MS = 60000L;
     private static final Pattern PICKAXE_COOLDOWN_PATTERN = Pattern.compile("cooldown for\\s+(\\d+)\\s*([sm])");
     private static BlockMiner instance;
     /**
@@ -98,6 +99,10 @@ public class BlockMiner extends AbstractFeature {
     @Getter
     @Setter
     private long pickaxeAbilityCooldownEndMs;
+
+    @Getter
+    @Setter
+    private boolean blockChanged;
 
     public static BlockMiner getInstance() {
         if (instance == null) {
@@ -186,7 +191,6 @@ public class BlockMiner extends AbstractFeature {
             currentState.onEnd(this);
         super.stop();
         KeyBindUtil.releaseAllExcept();
-        // Clear the block priority to prevent issues when changing a route mining target
         blockPriority.clear();
 
     }
@@ -284,6 +288,14 @@ public class BlockMiner extends AbstractFeature {
         if (!expandedBox.contains(particlePos)) return;
 
         targetParticlePos = particlePos;
+    }
+
+    @Override
+    protected void onBlockChange(BlockChangeEvent event) {
+        if (targetBlockPos != null && event.pos().equals(targetBlockPos)) {
+            log("Block change detected at target " + targetBlockPos + ": " + event.oldState().getBlock() + " -> " + event.newState().getBlock());
+            blockChanged = true;
+        }
     }
 
     @Override

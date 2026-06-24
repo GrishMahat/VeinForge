@@ -89,6 +89,10 @@ public class ApplyAbilityState implements BlockMinerState {
             timer2.reset();
             timer2.schedule(COOLDOWN);
             blockMiner.setLastAbilityUse(System.currentTimeMillis());
+            blockMiner.setPickaxeAbilityState(BlockMiner.PickaxeAbilityState.UNAVAILABLE);
+            blockMiner.setPickaxeAbilityCooldownEndMs(
+                    Math.max(blockMiner.getPickaxeAbilityCooldownEndMs(), System.currentTimeMillis() + BlockMiner.DEFAULT_PICKAXE_ABILITY_COOLDOWN_MS)
+            );
             KeyBindUtil.rightClick();
         }
 

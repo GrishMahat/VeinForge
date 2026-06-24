@@ -35,11 +35,6 @@ public class HUD {
     public boolean enableRouteBuilderHud = true;
     public VeinForgeConfig.HUDPos routeBuilderHUD = new VeinForgeConfig.HUDPos(5, 90, 0, 1.0f);
 
-    @ConfigOption(name = "Enable Pathfinder Stats HUD", desc = "Show latest pathfinding telemetry")
-    @ConfigEditorBoolean
-    public boolean enablePathfinderStatsHud = false;
-    public VeinForgeConfig.HUDPos pathfinderStatsHUD = new VeinForgeConfig.HUDPos(5, 140, 0, 1.0f);
-
     @ConfigOption(name = "Enable Fishing HUD", desc = "Show Galatea fishing runtime details")
     @ConfigEditorBoolean
     public boolean enableFishingHud = true;

@@ -7,6 +7,7 @@ import com.mojang.blaze3d.pipeline.DepthStencilState;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.platform.CompareOp;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import net.minecraft.client.renderer.BindGroupLayouts;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 
@@ -20,6 +21,8 @@ public final class VFRenderPipelines {
 
     public static final RenderPipeline QUADS_DEPTH = RenderPipelines.register(
             RenderPipeline.builder()
+                    .withBindGroupLayout(BindGroupLayouts.GLOBALS)
+                    .withBindGroupLayout(BindGroupLayouts.MATRICES_PROJECTION)
                     .withVertexShader("core/position_color")
                     .withFragmentShader("core/position_color")
                     .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
@@ -33,6 +36,8 @@ public final class VFRenderPipelines {
 
     public static final RenderPipeline QUADS_NO_DEPTH = RenderPipelines.register(
             RenderPipeline.builder()
+                    .withBindGroupLayout(BindGroupLayouts.GLOBALS)
+                    .withBindGroupLayout(BindGroupLayouts.MATRICES_PROJECTION)
                     .withVertexShader("core/position_color")
                     .withFragmentShader("core/position_color")
                     .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
@@ -46,6 +51,8 @@ public final class VFRenderPipelines {
 
     public static final RenderPipeline LINES_NO_DEPTH = RenderPipelines.register(
             RenderPipeline.builder()
+                    .withBindGroupLayout(BindGroupLayouts.GLOBALS)
+                    .withBindGroupLayout(BindGroupLayouts.MATRICES_PROJECTION)
                     .withVertexShader("core/position_color")
                     .withFragmentShader("core/position_color")
                     .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
@@ -59,6 +66,8 @@ public final class VFRenderPipelines {
 
     public static final RenderPipeline LINES_DEPTH = RenderPipelines.register(
             RenderPipeline.builder()
+                    .withBindGroupLayout(BindGroupLayouts.GLOBALS)
+                    .withBindGroupLayout(BindGroupLayouts.MATRICES_PROJECTION)
                     .withVertexShader("core/position_color")
                     .withFragmentShader("core/position_color")
                     .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
