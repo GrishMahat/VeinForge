@@ -15,97 +15,107 @@ import java.util.List;
 
 public class DebugHUD extends TextHud {
 
-   @Getter
-   private final static DebugHUD instance = new DebugHUD();
+    @Getter
+    private final static DebugHUD instance = new DebugHUD();
 
-   public DebugHUD() {
-      super();
-      this.x = 1;
-      this.y = 10;
-      this.enabled = false;
-   }
+    public DebugHUD() {
+        super();
+        this.x = 1;
+        this.y = 10;
+        this.enabled = false;
+    }
 
-   @Override
-   protected void getLines(List<String> lines, boolean example) {
+    public static DebugHUD getInstance() {
+        return instance;
+    }
 
-      if (example) {
-         lines.add("§f§lDebug");
-         lines.add("§7Macro §fCommission Macro §8(§aRUN §8/ §fMiningState§8) §8| §7Failsafe §fOK");
-         lines.add("§7FPS §f165 §8| §7Ping §f23ms");
-         lines.add("§7Location §fDwarven Mines §8| §7Sub §fRoyal Mines");
-         lines.add("§7Yaw/Pitch §f123.4 §8/ §f-12.3");
-         lines.add("§7Scoreboard §fCommission Tracker");
-         return;
-      }
+    @Override
+    protected int getAccentColor() {
+        return 0xFF94A3B8; // Slate 400
+    }
 
-      lines.add("§f§lDebug");
-      if (mc.player == null) {
-         lines.add("§7No player");
-         return;
-      }
+    @Override
+    protected void getLines(List<String> lines, boolean example) {
 
-      lines.add(getMacroFailsafeLine());
+        if (example) {
+            lines.add("§f§lDEBUG CONSOLE");
+            lines.add("§8§m------------------------");
+            lines.add("§8» §7Macro: §fCommission §8(§aRUN§8)");
+            lines.add("§8» §7State: §fMiningState");
+            lines.add("§8» §7System: §f165 FPS §8| §f23ms");
+            lines.add("§8» §7Pos: §f123, 70, 456");
+            return;
+        }
 
-      lines.add("§7FPS §f" + mc.getFps() + " §8| §7Focus §f" + mc.isWindowActive());
-      lines.add("§7Yaw/Pitch §f" + String.format("%.1f", mc.player.getYRot()) + " §8/ §f" + String.format("%.1f", mc.player.getXRot()));
+        lines.add("§f§lDEBUG CONSOLE");
+        lines.add("§8§m------------------------");
+        if (mc.player == null) {
+            lines.add("§8» §cPlayer not found");
+            return;
+        }
 
-      String title = ScoreboardUtil.getScoreboardTitle();
-      if (title != null && !title.isEmpty()) {
-         lines.add("§7Scoreboard §f" + title);
-      }
-   }
+        getMacroFailsafeLine(lines);
+        lines.add("§8» §7System: §f" + mc.getFps() + " FPS §8| §f" + (mc.isWindowActive() ? "§aFocused" : "§cBackground"));
+        lines.add("§8» §7Pos: §f" + mc.player.getBlockX() + ", " + mc.player.getBlockY() + ", " + mc.player.getBlockZ());
+        lines.add("§8» §7Rot: §f" + String.format("%.1f", mc.player.getYRot()) + " / " + String.format("%.1f", mc.player.getXRot()));
 
-   private String getMacroFailsafeLine() {
-      MacroManager mm = MacroManager.getInstance();
-      AbstractMacro active = mm.getActiveMacro();
-      AbstractMacro selected = mm.getCurrentMacro();
+        String title = ScoreboardUtil.getScoreboardTitle();
+        if (title != null && !title.isEmpty()) {
+            lines.add("§8» §7Score: §f" + title);
+        }
+    }
 
-      String macroName = active != null ? active.getName() : (selected != null ? selected.getName() : "None");
-      boolean running = active != null && active.isEnabled();
-      boolean paused = active != null && !active.isEnabled();
+    private void getMacroFailsafeLine(List<String> lines) {
+        MacroManager mm = MacroManager.getInstance();
+        AbstractMacro active = mm.getActiveMacro();
+        AbstractMacro selected = mm.getCurrentMacro();
 
-      String runLabel;
-      if (running) {
-         runLabel = "§aRUN";
-      } else if (paused) {
-         runLabel = "§ePAUSE";
-      } else {
-         runLabel = "§cOFF";
-      }
+        String macroName = active != null ? active.getName() : (selected != null ? selected.getName() : "None");
+        boolean running = active != null && active.isEnabled();
+        boolean paused = active != null && !active.isEnabled();
 
-      String stateLabel = getMacroStateLabel(active);
+        String runLabel;
+        if (running) {
+            runLabel = "§aRUN";
+        } else if (paused) {
+            runLabel = "§ePAUSE";
+        } else {
+            runLabel = "§cOFF";
+        }
 
-      FailsafeManager fm = FailsafeManager.getInstance();
-      String failsafeLabel;
-      if (fm.triggeredFailsafe.isPresent()) {
-         failsafeLabel = "§cTRIG " + fm.triggeredFailsafe.get().getFailsafeType();
-      } else if (!fm.emergencyQueue.isEmpty()) {
-         failsafeLabel = "§eQ " + fm.emergencyQueue.size();
-      } else {
-         failsafeLabel = "§aOK";
-      }
+        String stateLabel = getMacroStateLabel(active);
 
-      return "§7Macro §f" + macroName + " §8(" + runLabel + " §8/ §f" + stateLabel + "§8) §8| §7Failsafe " + failsafeLabel;
-   }
+        FailsafeManager fm = FailsafeManager.getInstance();
+        String failsafeLabel;
+        if (fm.triggeredFailsafe.isPresent()) {
+            failsafeLabel = "§cTRIG";
+        } else {
+            failsafeLabel = "§aOK";
+        }
 
-   private String getMacroStateLabel(AbstractMacro macro) {
-      if (macro == null) {
-         return "-";
-      }
+        lines.add("§8» §7Macro: §f" + macroName + " §8(" + runLabel + "§8)");
+        lines.add("§8» §7State: §f" + stateLabel);
+        lines.add("§8» §7Failsafe: " + failsafeLabel);
+    }
 
-      if (macro instanceof CommissionMacro cm) {
-         return cm.getCurrentState() == null ? "-" : cm.getCurrentState().getClass().getSimpleName();
-      }
-      if (macro instanceof GlacialMacro gm) {
-         return gm.getCurrentState() == null ? "-" : gm.getCurrentState().getClass().getSimpleName();
-      }
-      if (macro instanceof RouteMinerMacro rm) {
-         return rm.getCurrentState() == null ? "-" : rm.getCurrentState().getClass().getSimpleName();
-      }
-      if (macro instanceof PowderMacro pm) {
-         return pm.getCurrentState() == null ? "-" : pm.getCurrentState().getClass().getSimpleName();
-      }
+    private String getMacroStateLabel(AbstractMacro macro) {
+        if (macro == null) {
+            return "-";
+        }
 
-      return "-";
-   }
+        if (macro instanceof CommissionMacro cm) {
+            return cm.getCurrentState() == null ? "-" : cm.getCurrentState().getClass().getSimpleName();
+        }
+        if (macro instanceof GlacialMacro gm) {
+            return gm.getCurrentState() == null ? "-" : gm.getCurrentState().getClass().getSimpleName();
+        }
+        if (macro instanceof RouteMinerMacro rm) {
+            return rm.getCurrentState() == null ? "-" : rm.getCurrentState().getClass().getSimpleName();
+        }
+        if (macro instanceof PowderMacro pm) {
+            return pm.getCurrentState() == null ? "-" : pm.getCurrentState().getClass().getSimpleName();
+        }
+
+        return "-";
+    }
 }

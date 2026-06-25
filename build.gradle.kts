@@ -1,35 +1,33 @@
 plugins {
-    kotlin("jvm") version "2.2.21"
-    id("fabric-loom") version "1.15.3"
+    kotlin("jvm") version "2.4.0"
+    id("net.fabricmc.fabric-loom") version "1.17.11"
     id("io.freefair.lombok") version "8.6"
     id("com.gradleup.shadow") version "9.3.1"
 }
 
-val shadowModImpl by configurations.creating {
-    configurations.modImplementation.get().extendsFrom(this)
-}
+val shadowModImpl = configurations.create("shadowModImpl")
 
-val baseGroup: String by project
-val mcVersion: String by project
+val baseGroup: String = findProperty("baseGroup") as String
+val mcVersion: String = findProperty("mcVersion") as String
 val modVersion = project.version.toString()
-val yarnMappings: String by project
-val loaderVersion: String by project
-val fabricApiVersion: String by project
-val kotlinLoaderVersion: String by project
-val modmenuVersion: String by project
+val loomVersion: String = findProperty("loomVersion") as String
+val loaderVersion: String = findProperty("loaderVersion") as String
+val fabricApiVersion: String = findProperty("fabricApiVersion") as String
+val kotlinLoaderVersion: String = findProperty("kotlinLoaderVersion") as String
+val modmenuVersion: String = findProperty("modmenuVersion") as String
 val mixinGroup = "$baseGroup.mixin"
-val modid: String by project
-val modName: String by project
+val modid: String = findProperty("modid") as String
+val modName: String = findProperty("modName") as String
 
 group = baseGroup
 
 // Toolchains:
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(25))
 }
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(25)
 }
 
 // Minecraft configuration:
@@ -52,20 +50,16 @@ repositories {
     }
 }
 
-dependencyLocking {
-    lockAllConfigurations()
-    lockMode.set(org.gradle.api.artifacts.dsl.LockMode.STRICT)
-}
-
 dependencies {
     minecraft("com.mojang:minecraft:$mcVersion")
-    mappings(loom.officialMojangMappings())
-    modImplementation("net.fabricmc:fabric-loader:$loaderVersion")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
-    modImplementation("net.fabricmc:fabric-language-kotlin:$kotlinLoaderVersion")
-    "shadowModImpl"("org.notenoughupdates.moulconfig:modern-1.21.11:4.3.0-beta")
-    modCompileOnly("com.terraformersmc:modmenu:${modmenuVersion}")
+    implementation("net.fabricmc:fabric-loader:$loaderVersion")
+    implementation("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
+    implementation("net.fabricmc:fabric-language-kotlin:$kotlinLoaderVersion")
+    compileOnly("org.notenoughupdates.moulconfig:modern-26.2:4.7.2")
+    add("shadowModImpl", "org.notenoughupdates.moulconfig:modern-26.2:4.7.2")
+    compileOnly("com.terraformersmc:modmenu:${modmenuVersion}")
 
+    compileOnly("org.jetbrains:annotations:26.0.1")
     compileOnly("org.projectlombok:lombok:1.18.42")
     annotationProcessor("org.projectlombok:lombok:1.18.42")
 
@@ -89,10 +83,11 @@ tasks.withType<Jar> {
     archiveBaseName.set(modName)
 }
 
-// Keep intermediate/dev jars out of build/libs to avoid confusion.
 tasks.jar {
-    archiveClassifier.set("dev")
-    destinationDirectory.set(layout.buildDirectory.dir("badjars"))
+    dependsOn(tasks.shadowJar)
+    from(zipTree(tasks.shadowJar.get().archiveFile))
+    archiveBaseName.set(modName)
+    archiveClassifier.set("")
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
@@ -115,17 +110,13 @@ tasks.shadowJar {
     configurations = listOf(shadowModImpl)
     archiveClassifier.set("shadow")
     destinationDirectory.set(layout.buildDirectory.dir("badjars"))
-    relocate("io.github.notenoughupdates.moulconfig", "me.grish.veinforge.deps.moulconfig")
+    // relocate removed: shadow relocate only transforms the shadowed dependency classes,
+    // not references in the mod's own source. The original package name is used everywhere
+    // in the codebase, so relocating causes NoClassDefFoundError at runtime.
     mergeServiceFiles()
 }
 
-val remapJar by tasks.named<net.fabricmc.loom.task.RemapJarTask>("remapJar") {
-    dependsOn(tasks.shadowJar)
-    inputFile.set(tasks.shadowJar.get().archiveFile)
-    archiveBaseName.set(modName)
-    archiveClassifier.set("")
-}
-tasks.assemble.get().dependsOn(remapJar)
+tasks.assemble.get().dependsOn(tasks.jar)
 
 tasks.withType<AbstractArchiveTask> {
     isPreserveFileTimestamps = false

@@ -1,10 +1,13 @@
 package me.grish.veinforge.util.render;
 
+import com.mojang.blaze3d.PrimitiveTopology;
 import com.mojang.blaze3d.pipeline.BlendFunction;
+import com.mojang.blaze3d.pipeline.ColorTargetState;
+import com.mojang.blaze3d.pipeline.DepthStencilState;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
-import com.mojang.blaze3d.platform.DepthTestFunction;
+import com.mojang.blaze3d.platform.CompareOp;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.client.renderer.BindGroupLayouts;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 
@@ -16,45 +19,66 @@ import net.minecraft.resources.Identifier;
  */
 public final class VFRenderPipelines {
 
-   public static final RenderPipeline QUADS_DEPTH = RenderPipelines.register(
-           RenderPipeline.builder()
-                   .withVertexShader("core/position_color")
-                   .withFragmentShader("core/position_color")
-                   .withBlend(BlendFunction.TRANSLUCENT)
-                   .withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS)
-                   .withDepthTestFunction(DepthTestFunction.LEQUAL_DEPTH_TEST)
-                   .withDepthWrite(false)
-                   .withCull(false)
-                   .withLocation(Identifier.fromNamespaceAndPath("veinforge", "pipeline/quads_depth"))
-                   .build()
-   );
+    public static final RenderPipeline QUADS_DEPTH = RenderPipelines.register(
+            RenderPipeline.builder()
+                    .withBindGroupLayout(BindGroupLayouts.GLOBALS)
+                    .withBindGroupLayout(BindGroupLayouts.MATRICES_PROJECTION)
+                    .withVertexShader("core/position_color")
+                    .withFragmentShader("core/position_color")
+                    .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+                    .withVertexBinding(0, DefaultVertexFormat.POSITION_COLOR)
+                    .withPrimitiveTopology(PrimitiveTopology.QUADS)
+                    .withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false))
+                    .withCull(false)
+                    .withLocation(Identifier.fromNamespaceAndPath("veinforge", "pipeline/quads_depth"))
+                    .build()
+    );
 
-   public static final RenderPipeline QUADS_NO_DEPTH = RenderPipelines.register(
-           RenderPipeline.builder()
-                   .withVertexShader("core/position_color")
-                   .withFragmentShader("core/position_color")
-                   .withBlend(BlendFunction.TRANSLUCENT)
-                   .withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS)
-                   .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
-                   .withDepthWrite(false)
-                   .withCull(false)
-                   .withLocation(Identifier.fromNamespaceAndPath("veinforge", "pipeline/quads_no_depth"))
-                   .build()
-   );
+    public static final RenderPipeline QUADS_NO_DEPTH = RenderPipelines.register(
+            RenderPipeline.builder()
+                    .withBindGroupLayout(BindGroupLayouts.GLOBALS)
+                    .withBindGroupLayout(BindGroupLayouts.MATRICES_PROJECTION)
+                    .withVertexShader("core/position_color")
+                    .withFragmentShader("core/position_color")
+                    .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+                    .withVertexBinding(0, DefaultVertexFormat.POSITION_COLOR)
+                    .withPrimitiveTopology(PrimitiveTopology.QUADS)
+                    .withDepthStencilState(new DepthStencilState(CompareOp.ALWAYS_PASS, false))
+                    .withCull(false)
+                    .withLocation(Identifier.fromNamespaceAndPath("veinforge", "pipeline/quads_no_depth"))
+                    .build()
+    );
 
-   public static final RenderPipeline LINES_NO_DEPTH = RenderPipelines.register(
-           RenderPipeline.builder()
-                   .withVertexShader("core/position_color")
-                   .withFragmentShader("core/position_color")
-                   .withBlend(BlendFunction.TRANSLUCENT)
-                   .withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.DEBUG_LINES)
-                   .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
-                   .withDepthWrite(false)
-                   .withCull(false)
-                   .withLocation(Identifier.fromNamespaceAndPath("veinforge", "pipeline/lines_no_depth"))
-                   .build()
-   );
+    public static final RenderPipeline LINES_NO_DEPTH = RenderPipelines.register(
+            RenderPipeline.builder()
+                    .withBindGroupLayout(BindGroupLayouts.GLOBALS)
+                    .withBindGroupLayout(BindGroupLayouts.MATRICES_PROJECTION)
+                    .withVertexShader("core/position_color")
+                    .withFragmentShader("core/position_color")
+                    .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+                    .withVertexBinding(0, DefaultVertexFormat.POSITION_COLOR)
+                    .withPrimitiveTopology(PrimitiveTopology.LINES)
+                    .withDepthStencilState(new DepthStencilState(CompareOp.ALWAYS_PASS, false))
+                    .withCull(false)
+                    .withLocation(Identifier.fromNamespaceAndPath("veinforge", "pipeline/lines_no_depth"))
+                    .build()
+    );
 
-   private VFRenderPipelines() {
-   }
+    public static final RenderPipeline LINES_DEPTH = RenderPipelines.register(
+            RenderPipeline.builder()
+                    .withBindGroupLayout(BindGroupLayouts.GLOBALS)
+                    .withBindGroupLayout(BindGroupLayouts.MATRICES_PROJECTION)
+                    .withVertexShader("core/position_color")
+                    .withFragmentShader("core/position_color")
+                    .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+                    .withVertexBinding(0, DefaultVertexFormat.POSITION_COLOR)
+                    .withPrimitiveTopology(PrimitiveTopology.LINES)
+                    .withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false))
+                    .withCull(false)
+                    .withLocation(Identifier.fromNamespaceAndPath("veinforge", "pipeline/lines_depth"))
+                    .build()
+    );
+
+    private VFRenderPipelines() {
+    }
 }

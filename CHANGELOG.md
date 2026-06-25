@@ -1,9 +1,52 @@
 # VeinForge Changelog
 
-## v1.0.0-private (2026-05-30)
+## v1.1.0-pre (2026-06-25)
+
+> Pre-release — not recommended for production use.
+
+> **Note from the developer:** Several macros (Glacial, Mining, Powder, etc.) are not working properly right now — only the Commission Macro is functional. You might wonder: why release without fixing them? My main account is banned, so I can only use an alt that has nothing — I cannot mine, test, or debug most features on it. Once my main is back, I can test everything properly and fixes should come quickly. After everything is stable, I plan to rewrite problematic components like AutoMobKiller, and then move on to new features. Appreciate your patience.
+
+### Migration to Minecraft 26.2
+- Updated toolchain to Java 25, Kotlin 2.4.0, Fabric Loader 0.19.3, Fabric API 0.152.0
+- Updated ModMenu to 20.0.0-beta.2
+- Regenerated Gradle wrapper for Gradle 8.14
+- Removed invalid access widener entries for MC 26.2 compatibility
+- Updated MinecraftAccessor and KeyBindUtil for MC 26.2 API
+- Fixed `WHITE_STAINED_GLASS` → `STAINED_GLASS.white()`
+- Removed Tesselator usage
+- Updated GuiGraphics → GuiGraphicsExtractor across all files (drawString→text, renderOutline→outline)
+- Updated all imports and method calls for MC 26.2 API changes
+- Fixed moulconfig runtime: removed shadow relocate, added MC 26.2 access wideners
+
+### Rendering Fixes for 26.2
+- Fixed `DEBUG_LINES` → `LINES` render type for MC 26.2
+- Removed `sortOnUpload` for lines
+- Restored `setLineWidth` calls
+- Fixed RenderUtil push/pop matrix tracking
+- Added `LINES_DEPTH` pipeline
+- Cleanup of RenderUtil internals
+
+### Changes
+- Standardized HUD design: UPPERCASE titles with dividers, `§8»` prefix on all body lines, ColorPalette constants for accent colors
+- Removed InventoryHUD and PathfinderStatsHUD
+- Reformat entire codebase: converted 3-space indentation to 4-space, fixed imports and ordering
+- Prevented ability spam in ApplyAbilityState
+- Replaced deprecated Gradle delegate syntax with findProperty API
+
+### Known Bugs
+- Glacite commissions and most macros are not working properly after the MC 26.2 migration — only the Commission Macro is functional
+- Powder Macro, Glacial Macro, Mining Macro, Route Mining Macro, and Galatea Fishing may fail or behave unexpectedly
+- Custom world rendering (route lines, graph overlays, text labels) may wobble or jitter when the camera moves — caused by PoseStack disconnection from the rendering pipeline's view transform
+- Route waypoint text labels do not billboard (face the camera), causing them to appear shifted during camera movement
+- Mid-render camera rotation in RotationHandler can cause one-frame rotation jitter during active auto-rotations
+- No-depth overlay lines may flicker behind geometry due to depth-testing regression in drawNoDepthDebugLine
+
+## v1.0.0 (2026-05-30)
+
+Initial Fabric release for Minecraft 1.21.11.
 
 ### Features
-- Began Fabric 1.21.10 migration by updating build configuration and metadata.
+- Began Fabric 1.21.11 migration by updating build configuration and metadata.
 - Ported BlockUtil to Fabric/Yarn types (MinecraftClient, BlockPos, Direction, Vec3d, BlockState) and restored visibility/side‑point logic.
 - CommissionDebugMode mining simulation is back using the ported BlockUtil (debug candidates + cost logic).
 - Added feature render dispatch in EventManager so feature HUD/world rendering actually runs under Fabric.
@@ -122,27 +165,27 @@
 
 ## v2.7.1 (2025-1-7)
 
-## Changes
+### Changes
 - New name-mention failsafe
 - New option to auto warp to forge in Commission Macro
 - Will no longer start Dwarven Commissions if the slayer weapon has not been set in the config
 - Will warp to a new mining lobby if the pathfinding fails
 - Changed the error message getMiningStats throws
 
-## Fixes
+### Fixes
 - Duplicate mining tools causing ItemChangeFailsafe to trigger
 - Pickaxe ability issue
 - Issues with macro not mining after tabbing out
 
 ## v2.7.0 (2025-18-6)
 
-This update marks the first stable update of VeinForge v2.7.0 
+This update marks the first stable update of VeinForge v2.7.0
 
-## Current Macros Included
+### Current Macros Included
 - Commission Macro
 - Powder Macro
 
-## Changes
+### Changes
 - Auto Refuel is now usable
 - Fixed lag issues
 - Fixed personal compactors not working
@@ -158,19 +201,19 @@ This update marks the first stable update of VeinForge v2.7.0
 
 This update marks the official resumption of development on Mighty Miner.
 
-## Current Macros Included
+### Current Macros Included
 - Commission Macro
 - Powder Macro
 - Glacial Macro
 - Mining Macro
 - Route Mining Macro
 
-## Changes
+### Changes
 - Completely rewritten Mining Macro for improved efficiency and maintainability.
 - Block Miner has been overhauled with cleaner structure and better logic separation.
 - Automatically disable macro when there is an error
 
-## Updated Coding Standards
+### Updated Coding Standards
 - Avoid deeply nested switch statements when possible. Implement PROPER state machine patterns (see BlockMiner.java for a reference implementation).
 - Add Javadocs and inline comments, especially for abstract classes. (Tip: ChatGPT can assist with generating documentation.)
 - Standardize logging and error handling across the project. For example, all errors should be routed through the main macro class for consistency.
