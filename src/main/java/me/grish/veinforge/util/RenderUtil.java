@@ -30,31 +30,20 @@ public final class RenderUtil {
 
     private static PoseStack activePoseStack;
     private static SubmitNodeCollector activeNodeCollector;
-    private static boolean pushedWorldMatrices;
 
     private RenderUtil() {
     }
 
     public static void beginWorldRender(LevelRenderContext context) {
         activeNodeCollector = context.submitNodeCollector();
-        activePoseStack = context.poseStack();
-        pushedWorldMatrices = false;
-
-        if (activePoseStack != null) {
-            Vec3 cameraPos = mc.gameRenderer.mainCamera().position();
-            activePoseStack.pushPose();
-            activePoseStack.translate(-cameraPos.x, -cameraPos.y, -cameraPos.z);
-            pushedWorldMatrices = true;
-        }
+        activePoseStack = new PoseStack();
+        Vec3 cam = mc.gameRenderer.mainCamera().position();
+        activePoseStack.translate(-cam.x, -cam.y, -cam.z);
     }
 
     public static void endWorldRender() {
-        if (activePoseStack != null  && pushedWorldMatrices) {
-            activePoseStack.popPose();
-        }
         activeNodeCollector = null;
         activePoseStack = null;
-        pushedWorldMatrices = false;
     }
 
     public static void drawPoint(Vec3 vec, Color color) {
@@ -139,29 +128,14 @@ public final class RenderUtil {
         int b = color.getBlue();
         int a = color.getAlpha();
 
-        float dx = (float) (end.x - start.x);
-        float dy = (float) (end.y - start.y);
-        float dz = (float) (end.z - start.z);
-        float len = (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
-        final float nx, ny, nz;
-        if (len <= 0.0001f) {
-            nx = 0.0f;
-            ny = 1.0f;
-            nz = 0.0f;
-        } else {
-            nx = dx / len;
-            ny = dy / len;
-            nz = dz / len;
-        }
-
         activeNodeCollector.submitCustomGeometry(activePoseStack, RenderTypes.linesTranslucent(), (pose, consumer) -> {
             consumer.addVertex(pose, (float) start.x, (float) start.y, (float) start.z)
                     .setColor(r, g, b, a)
-                    .setNormal(pose, nx, ny, nz)
+                    .setNormal(pose, 0f, 1f, 0f)
                     .setLineWidth(DEFAULT_LINE_WIDTH);
             consumer.addVertex(pose, (float) end.x, (float) end.y, (float) end.z)
                     .setColor(r, g, b, a)
-                    .setNormal(pose, nx, ny, nz)
+                    .setNormal(pose, 0f, 1f, 0f)
                     .setLineWidth(DEFAULT_LINE_WIDTH);
         });
     }
@@ -202,9 +176,15 @@ public final class RenderUtil {
         int b = color.getBlue();
         int a = color.getAlpha();
 
-        activeNodeCollector.submitCustomGeometry(activePoseStack, VFRenderLayers.LINES_NO_DEPTH, (pose, consumer) -> {
-            consumer.addVertex(pose, (float) start.x, (float) start.y, (float) start.z).setColor(r, g, b, a);
-            consumer.addVertex(pose, (float) end.x, (float) end.y, (float) end.z).setColor(r, g, b, a);
+        activeNodeCollector.submitCustomGeometry(activePoseStack, RenderTypes.lines(), (pose, consumer) -> {
+            consumer.addVertex(pose, (float) start.x, (float) start.y, (float) start.z)
+                    .setColor(r, g, b, a)
+                    .setNormal(pose, 0f, 1f, 0f)
+                    .setLineWidth(DEFAULT_LINE_WIDTH);
+            consumer.addVertex(pose, (float) end.x, (float) end.y, (float) end.z)
+                    .setColor(r, g, b, a)
+                    .setNormal(pose, 0f, 1f, 0f)
+                    .setLineWidth(DEFAULT_LINE_WIDTH);
         });
     }
 
@@ -365,8 +345,6 @@ public final class RenderUtil {
 
         activePoseStack.translate(x, y, z);
 
-        activePoseStack.mulPose(mc.gameRenderer.mainCamera().rotation());
-
         float textScale = scale * 0.025f;
         activePoseStack.scale(-textScale, -textScale, textScale);
 
@@ -453,28 +431,14 @@ public final class RenderUtil {
             double x2, double y2, double z2,
             int r, int g, int b, int a
     ) {
-        float dx = (float) (x2 - x1);
-        float dy = (float) (y2 - y1);
-        float dz = (float) (z2 - z1);
-        float len = (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
-        if (len <= 0.0001f) {
-            dx = 0.0f;
-            dy = 1.0f;
-            dz = 0.0f;
-        } else {
-            dx /= len;
-            dy /= len;
-            dz /= len;
-        }
-
         buffer.addVertex(entry, (float) x1, (float) y1, (float) z1)
                 .setColor(r, g, b, a)
-                .setNormal(entry, dx, dy, dz)
+                .setNormal(entry, 0f, 1f, 0f)
                 .setLineWidth(DEFAULT_LINE_WIDTH);
 
         buffer.addVertex(entry, (float) x2, (float) y2, (float) z2)
                 .setColor(r, g, b, a)
-                .setNormal(entry, dx, dy, dz)
+                .setNormal(entry, 0f, 1f, 0f)
                 .setLineWidth(DEFAULT_LINE_WIDTH);
     }
 
