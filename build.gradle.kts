@@ -5,19 +5,19 @@ plugins {
     id("com.gradleup.shadow") version "9.3.1"
 }
 
-val shadowModImpl by configurations.creating
+val shadowModImpl = configurations.create("shadowModImpl")
 
-val baseGroup: String by project
-val mcVersion: String by project
+val baseGroup: String = findProperty("baseGroup") as String
+val mcVersion: String = findProperty("mcVersion") as String
 val modVersion = project.version.toString()
-val loomVersion: String by project
-val loaderVersion: String by project
-val fabricApiVersion: String by project
-val kotlinLoaderVersion: String by project
-val modmenuVersion: String by project
+val loomVersion: String = findProperty("loomVersion") as String
+val loaderVersion: String = findProperty("loaderVersion") as String
+val fabricApiVersion: String = findProperty("fabricApiVersion") as String
+val kotlinLoaderVersion: String = findProperty("kotlinLoaderVersion") as String
+val modmenuVersion: String = findProperty("modmenuVersion") as String
 val mixinGroup = "$baseGroup.mixin"
-val modid: String by project
-val modName: String by project
+val modid: String = findProperty("modid") as String
+val modName: String = findProperty("modName") as String
 
 group = baseGroup
 
