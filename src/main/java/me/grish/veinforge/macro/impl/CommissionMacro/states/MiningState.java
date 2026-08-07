@@ -6,6 +6,7 @@ import me.grish.veinforge.macro.impl.CommissionMacro.Commission;
 import me.grish.veinforge.macro.impl.CommissionMacro.CommissionMacro;
 import me.grish.veinforge.util.CommissionUtil;
 import me.grish.veinforge.util.InventoryUtil;
+import me.grish.veinforge.util.ToolSelector;
 import me.grish.veinforge.util.helper.MineableBlock;
 
 import java.util.List;
@@ -40,14 +41,14 @@ public class MiningState implements CommissionMacroState {
                 macro.getMiningSpeed(),
                 CommissionMacro.getInstance().getPickaxeAbility(),
                 priorityToUse,
-                VeinForge.config().general.miningTool
+                ToolSelector.getMiningTool()
         );
     }
 
     @Override
     public CommissionMacroState onTick(CommissionMacro macro) {
 
-        String miningTool = VeinForge.config().general.miningTool;
+        String miningTool = ToolSelector.getMiningTool();
         if (miningTool.toLowerCase().contains("drill") || InventoryUtil.getFullName(miningTool).contains("Drill")) {
             //log("Fuel detected: " + InventoryUtil.getDrillRemainingFuel(miningTool));
             if (InventoryUtil.getDrillRemainingFuel(miningTool) <= 100) {

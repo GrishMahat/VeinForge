@@ -74,15 +74,13 @@ public class EventManager {
     // The render pipeline was split into multiple explicit phases (opaque terrain,
     // solid features, translucent features, overlays, etc.).
     //
-    // This callback is now using AFTER_SOLID_FEATURES as the closest replacement
-    // for the old "after entities rendered in world" timing.
-    //the old "after entities rendered in world
-    // Behavior may not be identical to the previous event. The render pipeline is
-    // more granular now, so exact ordering relative to entities/translucency can differ.
-    // If visual glitches appear, this may need adjustment to a different phase
-    // such as AFTER_TRANSLUCENT_FEATURES or BEFORE_TRANSLUCENT_TERRAIN.
+    // COLLECT_SUBMITS fires after all world geometry (solid + translucent) has been
+    // collected into the SubmitNodeCollector but before it is submitted to the render
+    // pipeline. Custom geometry submitted here is drawn with the correct camera
+    // transform and depth ordering, which prevents the waggling/misaligned lines
+    // seen when drawing during earlier phases like AFTER_SOLID_FEATURES.
     private static void registerRenderEvents() {
-        LevelRenderEvents.AFTER_SOLID_FEATURES.register(context -> {
+        LevelRenderEvents.COLLECT_SUBMITS.register(context -> {
             Minecraft mc = Minecraft.getInstance();
             if (mc.level == null || mc.player == null) return;
 

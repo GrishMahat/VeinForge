@@ -1,10 +1,10 @@
 package me.grish.veinforge.macro.impl.CommissionMacro.states;
 
-import me.grish.veinforge.VeinForge;
 import me.grish.veinforge.feature.impl.AutoMobKiller.AutoMobKiller;
 import me.grish.veinforge.macro.impl.CommissionMacro.Commission;
 import me.grish.veinforge.macro.impl.CommissionMacro.CommissionMacro;
 import me.grish.veinforge.util.CommissionUtil;
+import me.grish.veinforge.util.ToolSelector;
 
 import java.util.Set;
 
@@ -22,7 +22,7 @@ public class MobKillingState implements CommissionMacroState {
         }
 
         AutoMobKiller.getInstance().start(mobName, macro.getCurrentCommission().getName().startsWith("Glacite") ?
-                        VeinForge.config().general.miningTool : VeinForge.config().commission.dwarvenCommission.slayerWeapon,
+                        ToolSelector.getMiningTool() : ToolSelector.getSlayerWeapon(),
                 getSlayerProfile(macro.getCurrentCommission()));
     }
 

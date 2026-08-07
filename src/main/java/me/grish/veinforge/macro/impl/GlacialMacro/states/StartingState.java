@@ -4,6 +4,7 @@ import me.grish.veinforge.VeinForge;
 import me.grish.veinforge.handler.GameStateHandler;
 import me.grish.veinforge.macro.impl.GlacialMacro.GlacialMacro;
 import me.grish.veinforge.util.InventoryUtil;
+import me.grish.veinforge.util.ToolSelector;
 import me.grish.veinforge.util.helper.location.SubLocation;
 
 import java.util.Objects;
@@ -23,7 +24,7 @@ public class StartingState implements GlacialMacroState {
     @Override
     public GlacialMacroState onTick(GlacialMacro macro) {
 
-        if (Objects.equals(VeinForge.config().general.miningTool, "")) {
+        if (Objects.equals(VeinForge.config().general.miningTool, "") && !ToolSelector.isAutoSelectEnabled()) {
             macro.disable("Mining tool is not set in the VeinForge config");
             return null;
         }

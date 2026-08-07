@@ -44,6 +44,13 @@ public class General {
     public String miningTool = "";
 
     @ConfigOption(
+            name = "Auto Select Tools",
+            desc = "Automatically selects the best mining tool and weapon from your hotbar instead of using the configured names"
+    )
+    @ConfigEditorBoolean
+    public boolean autoSelectTools = false;
+
+    @ConfigOption(
             name = "Set Mining Tool Button",
             desc = "Set the mining tool name from your currently held item"
     )

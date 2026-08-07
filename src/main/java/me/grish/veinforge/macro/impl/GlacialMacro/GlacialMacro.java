@@ -12,6 +12,7 @@ import me.grish.veinforge.macro.AbstractMacro;
 import me.grish.veinforge.macro.impl.GlacialMacro.states.*;
 import me.grish.veinforge.util.PlayerUtil;
 import me.grish.veinforge.util.TablistUtil;
+import me.grish.veinforge.util.ToolSelector;
 import me.grish.veinforge.util.helper.MineableBlock;
 import me.grish.veinforge.util.helper.route.RouteWaypoint;
 
@@ -192,7 +193,7 @@ public class GlacialMacro extends AbstractMacro {
     @Override
     public List<String> getNecessaryItems() {
         List<String> items = new ArrayList<>();
-        items.add(VeinForge.config().general.miningTool);
+        items.add(ToolSelector.getMiningTool());
         items.add("Aspect of the Void");
         items.add("Royal Pigeon");
 

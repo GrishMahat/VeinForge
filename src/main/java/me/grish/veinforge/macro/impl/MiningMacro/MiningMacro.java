@@ -10,6 +10,7 @@ import me.grish.veinforge.feature.impl.AutoGetStats.tasks.impl.PickaxeAbilityRet
 import me.grish.veinforge.feature.impl.BlockMiner.BlockMiner;
 import me.grish.veinforge.macro.AbstractMacro;
 import me.grish.veinforge.util.InventoryUtil;
+import me.grish.veinforge.util.ToolSelector;
 import me.grish.veinforge.util.helper.MineableBlock;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class MiningMacro extends AbstractMacro {
     private boolean handleRefuelIfNeeded() {
         if (!VeinForge.config().general.drillRefuel) return false;
 
-        String tool = VeinForge.config().general.miningTool;
+        String tool = ToolSelector.getMiningTool();
         if (tool == null) return false;
 
         if (!tool.toLowerCase().contains("drill")) return false;
@@ -75,7 +76,7 @@ public class MiningMacro extends AbstractMacro {
     @Override
     public List<String> getNecessaryItems() {
         if (necessaryItems.isEmpty()) {
-            necessaryItems.add(VeinForge.config().general.miningTool);
+            necessaryItems.add(ToolSelector.getMiningTool());
             log("Necessary items initialized: " + necessaryItems);
         }
         return necessaryItems;
@@ -140,7 +141,7 @@ public class MiningMacro extends AbstractMacro {
                     miningSpeed,
                     pickaxeAbility,
                     determinePriority(),
-                    VeinForge.config().general.miningTool
+                    ToolSelector.getMiningTool()
             );
 
             isMining = true;

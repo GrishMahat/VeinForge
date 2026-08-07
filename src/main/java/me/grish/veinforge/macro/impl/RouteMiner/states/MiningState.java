@@ -1,9 +1,9 @@
 package me.grish.veinforge.macro.impl.RouteMiner.states;
 
-import me.grish.veinforge.VeinForge;
 import me.grish.veinforge.feature.impl.BlockMiner.BlockMiner;
 import me.grish.veinforge.macro.impl.RouteMiner.RouteMinerMacro;
 import me.grish.veinforge.util.InventoryUtil;
+import me.grish.veinforge.util.ToolSelector;
 import me.grish.veinforge.util.helper.MineableBlock;
 
 /**
@@ -15,7 +15,7 @@ public class MiningState implements RouteMinerMacroState {
     @Override
     public void onStart(RouteMinerMacro macro) {
         log("Entering Mining State");
-        InventoryUtil.holdItem(VeinForge.config().general.miningTool);
+        InventoryUtil.holdItem(ToolSelector.getMiningTool());
         startMining(macro);
     }
 
@@ -43,7 +43,7 @@ public class MiningState implements RouteMinerMacroState {
                 macro.getMiningSpeed(),
                 macro.getPickaxeAbility(),
                 macro.getBlockPriority(),
-                VeinForge.config().general.miningTool
+                ToolSelector.getMiningTool()
         );
     }
 

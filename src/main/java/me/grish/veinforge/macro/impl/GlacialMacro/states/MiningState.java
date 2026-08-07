@@ -8,6 +8,7 @@ import me.grish.veinforge.macro.impl.GlacialMacro.GlaciteVeins;
 import me.grish.veinforge.util.InventoryUtil;
 import me.grish.veinforge.util.ScoreboardUtil;
 import me.grish.veinforge.util.TablistUtil;
+import me.grish.veinforge.util.ToolSelector;
 import me.grish.veinforge.util.helper.Clock;
 import me.grish.veinforge.util.helper.MineableBlock;
 import me.grish.veinforge.util.helper.route.RouteWaypoint;
@@ -26,7 +27,7 @@ public class MiningState implements GlacialMacroState {
     @Override
     public void onStart(GlacialMacro macro) {
         log("Starting to mine at vein: " + (macro.getCurrentVein() != null ? macro.getCurrentVein().first() : "Unknown"));
-        InventoryUtil.holdItem(VeinForge.config().general.miningTool);
+        InventoryUtil.holdItem(ToolSelector.getMiningTool());
         this.miningRetries = 0;
         startMining(macro);
     }
@@ -83,7 +84,7 @@ public class MiningState implements GlacialMacroState {
                 macro.getMiningSpeed(),
                 macro.getPickaxeAbility(),
                 blockPriorities,
-                VeinForge.config().general.miningTool
+                ToolSelector.getMiningTool()
         );
     }
 

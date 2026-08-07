@@ -11,6 +11,7 @@ import me.grish.veinforge.util.InventoryUtil;
 import me.grish.veinforge.util.InventoryUtil.ClickMode;
 import me.grish.veinforge.util.InventoryUtil.ClickType;
 import me.grish.veinforge.util.KeyBindUtil;
+import me.grish.veinforge.util.ToolSelector;
 import me.grish.veinforge.util.helper.RotationConfiguration;
 import me.grish.veinforge.util.helper.RotationConfiguration.RotationType;
 import me.grish.veinforge.util.helper.Target;
@@ -177,9 +178,9 @@ public class AutoCommissionClaim extends AbstractFeature {
                 }
 
                 if (VeinForge.config().commission.dwarvenCommission.commSwapBeforeClaiming) {
-                    if (!InventoryUtil.holdItem(VeinForge.config().commission.dwarvenCommission.altMiningTool)) {
+                    if (!InventoryUtil.holdItem(ToolSelector.getAltMiningTool())) {
                         this.stop(ClaimError.NO_ITEMS);
-                        sendError("Cannot hold Alt Mining Tool: " + VeinForge.config().commission.dwarvenCommission.altMiningTool);
+                        sendError("Cannot hold Alt Mining Tool: " + ToolSelector.getAltMiningTool());
                         break;
                     }
                     this.swapState(State.OPENING, 0);
@@ -305,9 +306,9 @@ public class AutoCommissionClaim extends AbstractFeature {
                     return;
                 }
                 if (VeinForge.config().commission.dwarvenCommission.commSwapBeforeClaiming) {
-                    if (!InventoryUtil.holdItem(VeinForge.config().general.miningTool)) {
+                    if (!InventoryUtil.holdItem(ToolSelector.getMiningTool())) {
                         this.stop(ClaimError.NO_ITEMS);
-                        sendError("Cannot hold Mining Tool: " + VeinForge.config().general.miningTool);
+                        sendError("Cannot hold Mining Tool: " + ToolSelector.getMiningTool());
                         break;
                     }
                 }

@@ -1,9 +1,9 @@
 package me.grish.veinforge.feature.impl.AutoGetStats.tasks.impl;
 
-import me.grish.veinforge.VeinForge;
 import me.grish.veinforge.feature.impl.AutoGetStats.tasks.AbstractInventoryTask;
 import me.grish.veinforge.feature.impl.AutoGetStats.tasks.TaskStatus;
 import me.grish.veinforge.util.InventoryUtil;
+import me.grish.veinforge.util.ToolSelector;
 import me.grish.veinforge.util.helper.Clock;
 import net.minecraft.client.Minecraft;
 
@@ -23,7 +23,7 @@ public class MiningBoostRetrievalTask extends AbstractInventoryTask<Integer> {
     public void init() {
         taskStatus = TaskStatus.RUNNING;
 
-        InventoryUtil.holdItem(VeinForge.config().general.miningTool);
+        InventoryUtil.holdItem(ToolSelector.getMiningTool());
 
         if (mc.gui.screen() != null) {
             InventoryUtil.closeScreen();

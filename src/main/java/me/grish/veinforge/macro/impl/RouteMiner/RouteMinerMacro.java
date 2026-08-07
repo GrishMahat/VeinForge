@@ -13,6 +13,7 @@ import me.grish.veinforge.macro.impl.RouteMiner.states.RouteMinerMacroState;
 import me.grish.veinforge.macro.impl.RouteMiner.states.StartingState;
 import me.grish.veinforge.util.KeyBindUtil;
 import me.grish.veinforge.util.PlayerUtil;
+import me.grish.veinforge.util.ToolSelector;
 import me.grish.veinforge.util.helper.MineableBlock;
 import me.grish.veinforge.util.helper.route.Route;
 import me.grish.veinforge.util.helper.route.RouteWaypoint;
@@ -168,7 +169,7 @@ public class RouteMinerMacro extends AbstractMacro {
     public List<String> getNecessaryItems() {
         List<String> items = new ArrayList<>();
         items.add("Aspect of the Void");
-        items.add(VeinForge.config().general.miningTool);
+        items.add(ToolSelector.getMiningTool());
         return items;
     }
 

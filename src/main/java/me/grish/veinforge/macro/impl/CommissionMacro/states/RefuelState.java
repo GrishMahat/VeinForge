@@ -3,6 +3,7 @@ package me.grish.veinforge.macro.impl.CommissionMacro.states;
 import me.grish.veinforge.VeinForge;
 import me.grish.veinforge.feature.impl.AutoDrillRefuel.AutoDrillRefuel;
 import me.grish.veinforge.macro.impl.CommissionMacro.CommissionMacro;
+import me.grish.veinforge.util.ToolSelector;
 
 public class RefuelState implements CommissionMacroState {
 
@@ -13,7 +14,7 @@ public class RefuelState implements CommissionMacroState {
     @Override
     public void onStart(CommissionMacro macro) {
         log("Starting refuel state");
-        AutoDrillRefuel.getInstance().start(VeinForge.config().general.miningTool, fuelTypeMap[VeinForge.config().general.refuelMachineFuel]);
+        AutoDrillRefuel.getInstance().start(ToolSelector.getMiningTool(), fuelTypeMap[VeinForge.config().general.refuelMachineFuel]);
     }
 
     @Override

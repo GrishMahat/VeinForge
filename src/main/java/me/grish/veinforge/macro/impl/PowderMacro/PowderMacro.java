@@ -13,6 +13,7 @@ import me.grish.veinforge.handler.GameStateHandler;
 import me.grish.veinforge.macro.AbstractMacro;
 import me.grish.veinforge.macro.impl.PowderMacro.states.PowderMacroState;
 import me.grish.veinforge.macro.impl.PowderMacro.states.StartingState;
+import me.grish.veinforge.util.ToolSelector;
 import me.grish.veinforge.util.helper.MineableBlock;
 import me.grish.veinforge.util.helper.location.Location;
 import net.minecraft.core.BlockPos;
@@ -226,7 +227,7 @@ public class PowderMacro extends AbstractMacro {
                 this.miningSpeed,
                 this.pickaxeAbility,
                 priorities,
-                VeinForge.config().general.miningTool
+                ToolSelector.getMiningTool()
         );
         return true;
     }
@@ -303,7 +304,7 @@ public class PowderMacro extends AbstractMacro {
         AutoChestUnlocker.chestQueue.clear();
         AutoChestUnlocker.chestQueue.add(chestPos.immutable());
 
-        String miningTool = VeinForge.config().general.miningTool == null ? "" : VeinForge.config().general.miningTool;
+        String miningTool = ToolSelector.getMiningTool() == null ? "" : ToolSelector.getMiningTool();
         this.chestUnlocker.start(miningTool, true);
     }
 
@@ -324,7 +325,7 @@ public class PowderMacro extends AbstractMacro {
     @Override
     public List<String> getNecessaryItems() {
         List<String> items = new ArrayList<>();
-        String miningTool = VeinForge.config().general.miningTool;
+        String miningTool = ToolSelector.getMiningTool();
         if (miningTool != null && !miningTool.trim().isEmpty()) {
             items.add(miningTool);
         }

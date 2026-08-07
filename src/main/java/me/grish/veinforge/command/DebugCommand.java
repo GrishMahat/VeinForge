@@ -475,7 +475,7 @@ public class DebugCommand {
 
         BlockMiner.PickaxeAbility ability = CommissionMacro.getInstance().getPickaxeAbility();
         miner.setWaitThreshold(me.grish.veinforge.VeinForge.config().general.oreRespawnWaitThreshold * 1000);
-        miner.start(blocksToMine, speed, ability, mithrilPriority, me.grish.veinforge.VeinForge.config().general.miningTool);
+        miner.start(blocksToMine, speed, ability, mithrilPriority, me.grish.veinforge.util.ToolSelector.getMiningTool());
 
         Logger.sendMessage("Started mine-here test: mithril+titanium in current area.");
         Logger.sendMessage("Speed=" + speed + ", Ability=" + ability.name() + ", WaitThresholdMs=" + (me.grish.veinforge.VeinForge.config().general.oreRespawnWaitThreshold * 1000));
@@ -527,8 +527,8 @@ public class DebugCommand {
         }
 
         String weapon = commission == Commission.GLACITE_WALKER_SLAYER
-                ? VeinForge.config().general.miningTool
-                : VeinForge.config().commission.dwarvenCommission.slayerWeapon;
+                ? me.grish.veinforge.util.ToolSelector.getMiningTool()
+                : me.grish.veinforge.util.ToolSelector.getSlayerWeapon();
 
         if (weapon == null || weapon.trim().isEmpty()) {
             Logger.sendError("Required weapon is not configured for " + commission.getName());

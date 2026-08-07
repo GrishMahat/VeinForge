@@ -3,6 +3,7 @@ package me.grish.veinforge.macro.impl.CommissionMacro;
 import lombok.Getter;
 import lombok.Setter;
 import me.grish.veinforge.VeinForge;
+import me.grish.veinforge.util.ToolSelector;
 import me.grish.veinforge.event.UpdateTablistEvent;
 import me.grish.veinforge.failsafe.impl.NameMentionFailsafe;
 import me.grish.veinforge.feature.FeatureManager;
@@ -95,8 +96,8 @@ public class CommissionMacro extends AbstractMacro {
     @Override
     public List<String> getNecessaryItems() {
         List<String> items = new ArrayList<>();
-        items.add(VeinForge.config().general.miningTool);
-        items.add(VeinForge.config().commission.dwarvenCommission.slayerWeapon);
+        items.add(ToolSelector.getMiningTool());
+        items.add(ToolSelector.getSlayerWeapon());
 
         if (VeinForge.config().commission.dwarvenCommission.commClaimMethod == 1) {
             items.add("Royal Pigeon");

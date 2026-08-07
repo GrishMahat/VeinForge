@@ -1,5 +1,18 @@
 # VeinForge Changelog
 
+## v1.1.1 (2026-08-07)
+
+### New Features
+- Added **Auto Tool Selection** (`Auto Select Tools` toggle in General config): automatically picks the best mining tool from your hotbar (Gauntlet/Drill > Pickonimbus > pickaxes, with bonus for Blue Cheese goblin omelette), plus auto-detects your slayer weapon and alt mining tool. Falls back to configured names when disabled or nothing suitable is found.
+  - Applies to all macros: Commission, Glacial, Mining, Powder, Route Miner, Auto Commission Claim, Auto Get Stats, and debug commands.
+
+### Fixes
+- Fixed wobbly/jittering world overlay lines (pathfinding paths, route lines, graph overlays, block highlights): all custom world rendering now happens during the `COLLECT_SUBMITS` render phase instead of `AFTER_SOLID_FEATURES`, so geometry is drawn with the correct camera transform and depth ordering.
+- Fixed Stats & Equipment menu detection: renamed "Your Equipment and Stats" → "Stats & Equipment" (new SkyBlock menu name).
+
+### Changes
+- Removed the progress bar from the Dwarven Commission HUD.
+
 ## v1.1.0-pre (2026-06-25)
 
 > Pre-release — not recommended for production use.

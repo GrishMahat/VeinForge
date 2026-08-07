@@ -37,17 +37,7 @@ public class CommissionHUD extends TextHud {
     }
 
     @Override
-    protected int getExtraHeight() {
-        return commissionMacro.isEnabled() ? 10 : 0;
-    }
-
-    @Override
     protected void postRender(GuiGraphicsExtractor context, int panelW, int panelH, float scale) {
-        if (!commissionMacro.isEnabled() || currentProgress <= 0) return;
-
-        int padding = getPaddingPx();
-        int barY = panelH - padding - 8;
-        drawProgressBar(context, padding, barY, panelW - padding * 2, 4, currentProgress, getAccentColor());
     }
 
     @Override

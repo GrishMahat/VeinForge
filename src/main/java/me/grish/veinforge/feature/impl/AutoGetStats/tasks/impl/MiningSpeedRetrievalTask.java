@@ -1,9 +1,9 @@
 package me.grish.veinforge.feature.impl.AutoGetStats.tasks.impl;
 
-import me.grish.veinforge.VeinForge;
 import me.grish.veinforge.feature.impl.AutoGetStats.tasks.AbstractInventoryTask;
 import me.grish.veinforge.feature.impl.AutoGetStats.tasks.TaskStatus;
 import me.grish.veinforge.util.InventoryUtil;
+import me.grish.veinforge.util.ToolSelector;
 import me.grish.veinforge.util.helper.Clock;
 import net.minecraft.client.Minecraft;
 
@@ -25,9 +25,9 @@ public class MiningSpeedRetrievalTask extends AbstractInventoryTask<Integer> {
     public void init() {
         taskStatus = TaskStatus.RUNNING;
 
-        InventoryUtil.holdItem(VeinForge.config().general.miningTool);
+        InventoryUtil.holdItem(ToolSelector.getMiningTool());
 
-        if (!InventoryUtil.getInventoryName().equals("Your Equipment and Stats")) {
+        if (!InventoryUtil.getInventoryName().equals("Stats & Equipment")) {
             if (mc.gui.screen() != null) {
                 InventoryUtil.closeScreen();
             }
@@ -46,7 +46,7 @@ public class MiningSpeedRetrievalTask extends AbstractInventoryTask<Integer> {
             return;
         }
 
-        if (!InventoryUtil.getInventoryName().equals("Your Equipment and Stats")) {
+        if (!InventoryUtil.getInventoryName().equals("Stats & Equipment")) {
             taskStatus = TaskStatus.FAILURE;
             error = "Cannot open Stats Menu";
             return;
