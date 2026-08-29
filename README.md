@@ -13,6 +13,17 @@ This version is a result of a major migration from the original Mighty Miner (1.
 
 This project was updated strictly for personal needs. Several features, such as the **Fishing Macro**, were added as "flukes" to assist with personal goals (like leveling up). 
 
+## Maintenance Mode
+
+This project is now in **maintenance mode**. I no longer play Hypixel Skyblock, so there will be no active development of new features or significant changes. However:
+
+- **Reported bugs will be fixed** if they are within scope and feasible.
+- **No new features** will be added.
+- **No major refactors** will be undertaken.
+- Issues and PRs are still welcome, but response time may vary.
+
+If you're looking for an actively developed alternative, consider exploring other options in the community.
+
 ## What's Changed
 
 This project has undergone a significant evolution from its initial migration:
